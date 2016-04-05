@@ -6,16 +6,15 @@ import sys
 import os
 
 import redis
+import requests
 from celery.utils.log import get_task_logger
 logger = get_task_logger(__name__)
 
-import requests
-
 from celery_service.celery import app
 from celery_service import storage, image_crawler_settings
-from celery_service.spider import Spider
 from celery_service.response import Response
 from celery_service.request import Request
+from spider import Spider
 
 
 """
@@ -43,6 +42,8 @@ class SpiderTask(app.Task):
 
 @app.task(base=SpiderTask)
 def parse(response):
+    response = Response.load(response)
+
     _spider = parse._spider
     if response.callback and hasattr(_spider, response.callback):
         _parse = getattr(_spider, response.callback)
@@ -69,16 +70,23 @@ class DownloadTask(app.Task):
 
 @app.task(base=DownloadTask)
 def download(request):
+    request = Request.load(request)
+
     # todo: 目前只支持 GET
     if request.method == 'GET':
         try:
             r = requests.get(request.url, headers=request.headers, timeout=5.0)
             if r.status_code == 200:
                 return Response(url=request.url, status=r.status_code, headers=r.headers, body=r.content, callback=request.callback,
-                                method=request.method)
+                                method=request.method).to_dict()
             else:
                 raise Exception('[download] HTTP code error: {}'.format(r.status_code))
         except Exception, e:
             raise e
     else:
         raise Exception('The method is not implemented now.')
+
+
+@app.task
+def add(x, y):
+    return x + y
