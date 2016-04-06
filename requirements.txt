@@ -1,5 +1,5 @@
-requests
+requests==2.8.1
 beautifulsoup4
 lxml
-celery
+celery==3.1.20
 redis
