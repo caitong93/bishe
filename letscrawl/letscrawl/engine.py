@@ -6,9 +6,8 @@ import redis
 
 import scheduler.tasks as sched_tasks
 import spider
-from crawler import image_crawler_settings
 from crawler import tasks
-from image_crawler import get_logger
+from letscrawl import get_logger, image_crawler_settings
 from scheduler import request_queue
 
 redis_conn = redis.Redis(image_crawler_settings.redis_host, image_crawler_settings.redis_port)
@@ -33,7 +32,7 @@ while countdown:
     if request_dict is None:
         countdown -= 1
         logger.info('[engine] Sleep for a while. countdown: {}.'.format(countdown))
-        time.sleep(1)
+        time.sleep(3)
         continue
 
     countdown = 10
@@ -44,7 +43,8 @@ while countdown:
 
     tasks.download.delay(request_dict)
 
-    # break
+    time.sleep(0.1)
+
 
 logger.info('Total: {}'.format(tot))
 # r = tasks.add.delay(1, 1)

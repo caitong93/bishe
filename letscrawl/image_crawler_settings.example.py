@@ -11,3 +11,6 @@ SCHEDULER_CELERY_RESULT_BACKEND = 'redis://localhost'
 # crawler 配置
 CRAWLER_BROKER_URL = 'redis://localhost:6379/0'
 CRAWLER_CELERY_RESULT_BACKEND = 'redis://localhost'
+
+# 数据库配置
+MONGODB_URL = 'mongodb://localhost:27017'

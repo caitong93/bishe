@@ -3,7 +3,7 @@ import os
 import sys
 
 # 存储图片目录
-storage = os.path.dirname(os.path.abspath('.')) + '/store'
+storage = os.path.dirname(os.path.abspath('.')) + '/data'
 
 if not os.path.exists(storage):
     os.mkdir(storage)

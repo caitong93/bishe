@@ -34,8 +34,6 @@ def push(request):
 
     if not conn.sismember(url_set, hashval):
         conn.sadd(url_set, hashval)
-        #conn.rpush(request_queue, unicode(request))
-        # conn.rpush(request_queue, request)
         conn.rpush(request_queue, json.dumps(request, ensure_ascii=False))
     else:
         logger.info('[push] {} Ignore.'.format(request['url']))

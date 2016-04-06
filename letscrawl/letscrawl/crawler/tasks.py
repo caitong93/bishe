@@ -7,6 +7,7 @@ import os
 
 import redis
 import requests
+from celery import Task
 from celery.utils.log import get_task_logger
 logger = get_task_logger(__name__)
 
@@ -17,20 +18,19 @@ from core import Response, Request
 from spider import Spider
 
 
-"""
-@app.task
-def download(url):
-    r = requests.get(url, headers=common_headers, timeout=5.0)
-    if r.status_code == 200:
-        file_name = url.split('/')[-1]
-        save_to_path = os.path.join(storage, file_name)
-        with open(save_to_path, 'w') as f:
-            f.write(r.content)
-"""
+# +++++++++ Item Pipeline
+class ItemTask(Task):
+    abstract = True
+    ignore_result = True
+
+
+@app.task(base=ItemTask)
+def item_pipeline(item):
+    item.save()
 
 # +++++++++ Parser
 
-class SpiderTask(app.Task):
+class SpiderTask(Task):
     abstract = True
     ignore_result = True
     _spider = Spider()
@@ -51,13 +51,14 @@ def parse(response):
                     sched_tasks.push.delay(res.to_dict())
                 else:
                     logger.debug('[parse] Item')
+                    item_pipeline.delay(res)
 
         except TypeError:
             pass
 
 
 # +++++++++ Downloader
-class DownloadTask(app.Task):
+class DownloadTask(Task):
     abstract = True
     ignore_result = True
 

@@ -71,4 +71,5 @@ class BaseSpider(object):
 
 
 class BaseItem(object):
-    pass
+    def save(self):
+        pass

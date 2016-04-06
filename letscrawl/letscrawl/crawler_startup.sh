@@ -1,0 +1,1 @@
+celery -A crawler worker --loglevel=info
