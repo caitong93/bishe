@@ -3,3 +3,4 @@ beautifulsoup4
 lxml
 celery==3.1.20
 redis
+pymongo

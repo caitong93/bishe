@@ -66,11 +66,13 @@ def deploy():
 
 ####### Startup
 
+# 需要先启动 redis-server 和 rabbitmq-server
 @roles('scheduler')
 def start_scheduler():
     run('cd /app/bishe/letscrawl/letscrawl && sh scheduler_startup.sh')
 
 
+# 需要先启动 redis-server
 @roles('crawler')
 @parallel
 def start_crawler():
