@@ -28,7 +28,7 @@ class Spider(BaseSpider):
 
     def start_urls(self):
         yield Request(method='GET', url='http://desk.zol.com.cn/',
-                       headers=common_headers, callback=self.parse, meta={'depth': 0})
+                       headers=common_headers, callback=self.parse, meta={'depth': 3})
 
     def parse(self, response):
         # logger.info('[spider.parse] depth {}, url {}'.format(response.meta['depth'], response.url))
