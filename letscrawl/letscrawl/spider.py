@@ -28,7 +28,7 @@ class Spider(BaseSpider):
 
     def start_urls(self):
         yield Request(method='GET', url='http://desk.zol.com.cn/',
-                       headers=common_headers, callback=self.parse, meta={'depth': 3})
+                       headers=common_headers, callback=self.parse, meta={'depth': 0})
 
     def parse(self, response):
         # logger.info('[spider.parse] depth {}, url {}'.format(response.meta['depth'], response.url))
@@ -44,7 +44,7 @@ class Spider(BaseSpider):
 
                     if url_.startswith('/'): url_ = self.to_absolute(response.url, url_)
 
-                    if self.url_filter(url_) and response.meta['depth'] < 1:
+                    if self.url_filter(url_) and response.meta['depth'] < 5:
                         yield Request(method='GET',
                                       url=url_,
                                       headers=common_headers,
