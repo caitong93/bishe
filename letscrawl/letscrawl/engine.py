@@ -33,7 +33,7 @@ while countdown:
 
     if request_dict is None:
         countdown -= 1
-        logger.info('[engine] Sleep for a while. countdown: {}.'.format(countdown))
+        # logger.info('[engine] Sleep for a while. countdown: {}.'.format(countdown))
         time.sleep(3)
         continue
 
