@@ -24,6 +24,8 @@ for req in spider_.start_urls():
 
 countdown = 10
 tot = 0
+start = time.time()
+timer = time.time()
 
 while countdown:
     # Json string.
@@ -44,6 +46,8 @@ while countdown:
     tasks.download.delay(request_dict)
 
     time.sleep(0.1)
+
+    if time.time() > timer + 30: logger.info('{} requests per second, {} requests in total.'.format(int(tot/time.time() - start), tot))
 
 
 logger.info('Total: {}'.format(tot))
